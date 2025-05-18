@@ -1,0 +1,52 @@
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Full viewport height */
+  padding: 20px;
+  background-color: #f0f2f5; /* Slightly different background for login page if desired */
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* More pronounced shadow */
+}
+
+.login-card .card-header {
+  background-color: #007bff; /* Primary color for header */
+  color: white;
+  border-bottom: none;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 1.5rem;
+}
+
+.login-card .card-header h2 {
+  margin-bottom: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.login-card .card-body {
+  padding: 2rem;
+}
+
+.login-card .form-control-lg {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+}
+
+.login-card .btn-lg {
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.login-card .card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  padding: 1rem;
+  font-size: 0.9rem;
+}

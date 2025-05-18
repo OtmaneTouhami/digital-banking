@@ -1,18 +1,25 @@
-<div class="p-3">
-    <div class="card">
-        <div class="card-header">Authentication</div>
+<div class="login-container">
+    <div class="login-card card">
+        <div class="card-header">
+            <h2 class="text-center">Digital Banking Login</h2>
+        </div>
         <div class="card-body">
             <form [formGroup]="formLogin" (ngSubmit)="handleLogin()">
                 <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input type="text" class="form-control" formControlName="username">
+                    <input type="text" class="form-control form-control-lg" formControlName="username" placeholder="Enter your username">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Password</label>
-                    <input type="password" class="form-control" formControlName="password">
+                    <input type="password" class="form-control form-control-lg" formControlName="password" placeholder="Enter your password">
                 </div>
-                <button class="btn btn-success">Login</button>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg" [disabled]="formLogin.invalid">Login</button>
+                </div>
             </form>
+        </div>
+        <div class="card-footer text-center text-muted">
+            &copy; 2024 Digital Banking Solutions
         </div>
     </div>
 </div>

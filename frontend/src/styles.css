@@ -1,1 +1,83 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f7f6; /* A light, neutral background */
+  color: #333;
+  margin: 0;
+  padding: 0;
+  padding-top: 70px; /* Added padding for fixed-top navbar. Adjust if navbar height changes. */
+}
+
+.container-fluid,
+.container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* General Card Styling (can be overridden by component-specific styles) */
+.card {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e9ecef;
+  font-weight: 600;
+  padding: 1rem 1.25rem;
+}
+
+.card-title {
+    font-weight: 600;
+}
+
+/* Button styling */
+.btn {
+  border-radius: 0.3rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #007bff; /* Standard Bootstrap primary */
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+/* Table styling */
+.table {
+  margin-bottom: 1rem;
+  color: #212529;
+}
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.table td,
+.table th {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+/* Form styling */
+.form-control {
+  border-radius: 0.3rem;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}

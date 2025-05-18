@@ -22,7 +22,7 @@ export class CustomersComponent implements OnInit {
     public authService: AuthService,
     private customerService: CustomerService,
     private fb: FormBuilder,
-    private router: Router
+    public router: Router
   ) {}
 
   ngOnInit(): void {
@@ -36,26 +36,27 @@ export class CustomersComponent implements OnInit {
     this.customers = this.customerService.searchCustomers(kw).pipe(
       catchError((err) => {
         this.errorMessage = err.message;
-        return throwError(err);
+        alert("Error searching customers: " + (err.error?.message || err.message));
+        return throwError(() => new Error(err.message));
       })
     );
   }
 
+  handleEditCustomer(customer: Customer) {
+    this.router.navigateByUrl(`/admin/edit-customer/${customer.id}`);
+  }
+
   handleDeleteCustomer(c: Customer) {
-    let conf = confirm('Are you sure?');
+    let conf = confirm(`Are you sure you want to delete customer "${c.name}"?`);
     if (!conf) return;
     this.customerService.deleteCustomer(c.id).subscribe({
       next: (resp) => {
-        this.customers = this.customers.pipe(
-          map((data) => {
-            let index = data.indexOf(c);
-            data.slice(index, 1);
-            return data;
-          })
-        );
+        alert('Customer has been successfully deleted!');
+        this.handleSearchCustomers();
       },
       error: (err) => {
         console.log(err);
+        alert("Error deleting customer: " + (err.error?.message || err.message));
       },
     });
   }

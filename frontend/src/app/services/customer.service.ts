@@ -26,6 +26,15 @@ export class CustomerService {
       customer
     );
   }
+  public updateCustomer(id: number, customer: Customer): Observable<Customer> {
+    return this.http.put<Customer>(
+      environment.backendHost + '/customers/' + id,
+      customer
+    );
+  }
+  public getCustomerById(id: number): Observable<Customer> {
+    return this.http.get<Customer>(environment.backendHost + '/customers/' + id);
+  }
   public deleteCustomer(id: number) {
     return this.http.delete(environment.backendHost + '/customers/' + id);
   }

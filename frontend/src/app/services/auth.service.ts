@@ -38,9 +38,16 @@ export class AuthService {
     this.accessToken = response['access-token'];
     let decodedJwt: any = jwtDecode(this.accessToken);
     this.userName = decodedJwt.sub;
-    this.roles = decodedJwt.scope;
+    const scope = decodedJwt.scope;
+    if (typeof scope === 'string') {
+      this.roles = scope.split(' ').filter(role => role.length > 0);
+    } else if (Array.isArray(scope)) {
+      this.roles = scope;
+    } else {
+      this.roles = [];
+    }
     localStorage.setItem('access-token', this.accessToken);
-    console.log(this.roles);
+    console.log('Processed roles:', this.roles);
   }
 
   logout() {
@@ -56,7 +63,12 @@ export class AuthService {
     let token = localStorage.getItem('access-token');
     if (token) {
       this.loadProfile({ 'access-token': token });
-      this.router.navigateByUrl('/admin/customers');
+      this.router.navigateByUrl('/admin/dashboard');
     }
+  }
+
+  public changePassword(oldPassword: string, newPassword: string) {
+    const payload = { oldPassword, newPassword };
+    return this.http.post(environment.backendHost + '/auth/change-password', payload, { responseType: 'text' });
   }
 }

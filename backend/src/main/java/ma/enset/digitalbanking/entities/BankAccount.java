@@ -22,6 +22,7 @@ public abstract class BankAccount {
     private Date createdAt;
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
+    private String operatedByUserId;
     @ManyToOne
     private Customer customer;
 

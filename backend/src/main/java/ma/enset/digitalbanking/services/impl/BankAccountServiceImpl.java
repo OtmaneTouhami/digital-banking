@@ -15,6 +15,8 @@ import ma.enset.digitalbanking.repositories.CustomerRepository;
 import ma.enset.digitalbanking.services.BankAccountService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.function.Function;
 
 @Service
 @Transactional
@@ -33,10 +37,19 @@ public class BankAccountServiceImpl implements BankAccountService {
     private AccountOperationRepository accountOperationRepository;
     private BankAccountMapperImpl dtoMapper;
 
+    private String getAuthenticatedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+            return "SYSTEM"; // Or null if preferred and DB allows
+        }
+        return authentication.getName();
+    }
+
     @Override
     public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
         log.info("Saving new Customer");
         Customer customer = dtoMapper.fromCustomerDTO(customerDTO);
+        customer.setOperatedByUserId(getAuthenticatedUserId());
         Customer savedCustomer = customerRepository.save(customer);
         return dtoMapper.fromCustomer(savedCustomer);
     }
@@ -47,6 +60,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         if (customer == null)
             throw new CustomerNotFoundException("Customer not found");
         CurrentAccount currentAccount = new CurrentAccount();
+        currentAccount.setOperatedByUserId(getAuthenticatedUserId());
         currentAccount.setId(UUID.randomUUID().toString());
         currentAccount.setCreatedAt(new Date());
         currentAccount.setBalance(initialBalance);
@@ -62,6 +76,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         if (customer == null)
             throw new CustomerNotFoundException("Customer not found");
         SavingAccount savingAccount = new SavingAccount();
+        savingAccount.setOperatedByUserId(getAuthenticatedUserId());
         savingAccount.setId(UUID.randomUUID().toString());
         savingAccount.setCreatedAt(new Date());
         savingAccount.setBalance(initialBalance);
@@ -100,6 +115,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         if (bankAccount.getBalance() < amount)
             throw new BalanceNotSufficientException("Balance not sufficient");
         AccountOperation accountOperation = new AccountOperation();
+        accountOperation.setOperatedByUserId(getAuthenticatedUserId());
         accountOperation.setType(OperationType.DEBIT);
         accountOperation.setAmount(amount);
         accountOperation.setDescription(description);
@@ -115,6 +131,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         BankAccount bankAccount = bankAccountRepository.findById(accountId)
                 .orElseThrow(() -> new BankAccountNotFoundException("BankAccount not found"));
         AccountOperation accountOperation = new AccountOperation();
+        accountOperation.setOperatedByUserId(getAuthenticatedUserId());
         accountOperation.setType(OperationType.CREDIT);
         accountOperation.setAmount(amount);
         accountOperation.setDescription(description);
@@ -155,8 +172,9 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
-        log.info("Saving new Customer");
+        log.info("Updating Customer");
         Customer customer = dtoMapper.fromCustomerDTO(customerDTO);
+        customer.setOperatedByUserId(getAuthenticatedUserId());
         Customer savedCustomer = customerRepository.save(customer);
         return dtoMapper.fromCustomer(savedCustomer);
     }
@@ -193,5 +211,18 @@ public class BankAccountServiceImpl implements BankAccountService {
         List<Customer> customers=customerRepository.searchCustomer(keyword);
         List<CustomerDTO> customerDTOS = customers.stream().map(cust -> dtoMapper.fromCustomer(cust)).collect(Collectors.toList());
         return customerDTOS;
+    }
+
+    @Override
+    public DashboardStatsDTO getDashboardStats() {
+        long totalCustomers = customerRepository.count();
+        long totalAccounts = bankAccountRepository.count();
+        long totalOperations = accountOperationRepository.count();
+
+        List<BankAccount> allAccounts = bankAccountRepository.findAll();
+        Map<String, Long> accountTypeCounts = allAccounts.stream()
+                .collect(Collectors.groupingBy(acc -> acc.getClass().getSimpleName(), Collectors.counting()));
+
+        return new DashboardStatsDTO(totalCustomers, totalAccounts, accountTypeCounts, totalOperations);
     }
 }

@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top app-navbar">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Digital Banking</a>
+    <a class="navbar-brand" routerLink="/admin/dashboard">DigitalBank Pro</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -15,44 +15,73 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link" routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/admin/accounts">Accounts</a>
+          <a class="nav-link" routerLink="/admin/accounts" routerLinkActive="active">Accounts</a>
         </li>
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
             href="#"
-            id="navbarDropdown"
+            id="navbarDropdownCustomers"
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
+            routerLinkActive="active"
           >
             Customers
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownCustomers">
             <li>
-              <a class="dropdown-item" routerLink="/admin/customers"
+              <a class="dropdown-item" routerLink="/admin/customers" routerLinkActive="active-dropdown-item"
                 >Search customers</a
               >
             </li>
             <li *ngIf="authService.roles.includes('ADMIN')">
-              <a class="dropdown-item" routerLink="/admin/new-customer"
+              <a class="dropdown-item" routerLink="/admin/new-customer" routerLinkActive="active-dropdown-item"
                 >New customer</a
               >
             </li>
           </ul>
         </li>
+        <!-- Removed old Home link as Dashboard serves that purpose -->
       </ul>
-      <!-- logout button and username-->
-      <div class="d-flex align-items-center">
-        <span
-          class="text-white me-3"
-          *ngIf="authService.isAuthenticated === true"
-          >{{ authService.userName }}</span
-        >
-        <button class="btn btn-outline-light" (click)="logout()">Logout</button>
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown" *ngIf="authService.isAuthenticated">
+          <a
+            class="nav-link dropdown-toggle profile-dropdown-toggle"
+            href="#"
+            id="navbarDropdownProfile"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-person-circle me-1"></i> <!-- Optional: Bootstrap Icon -->
+            {{ authService.userName }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownProfile">
+            <li>
+              <a class="dropdown-item" routerLink="/admin/profile" routerLinkActive="active-dropdown-item">
+                <i class="bi bi-person-lines-fill me-2"></i>View Profile
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/admin/change-password" routerLinkActive="active-dropdown-item">
+                <i class="bi bi-key-fill me-2"></i>Change Password
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item logout-link" (click)="logout()" style="cursor: pointer;">
+                <i class="bi bi-box-arrow-right me-2"></i>Logout
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <div class="d-flex align-items-center" *ngIf="!authService.isAuthenticated">
+        <a class="btn btn-outline-light" routerLink="/login">Login</a>
       </div>
     </div>
   </div>

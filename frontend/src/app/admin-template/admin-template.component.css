@@ -1,0 +1,21 @@
+.admin-content {
+  padding: 20px;
+  margin-left: auto; /* Center content if max-width is applied */
+  margin-right: auto;
+  /* max-width: 1200px; /* Optional: if you want to constrain content width */
+  /* background-color: #fff; /* Optional: if body has a different color and you want content area white */
+  /* border-radius: 8px; /* Optional: if you want a card-like content area */
+  /* box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Optional */
+}
+
+/* Ensure the template takes up available height if needed, good for footers or certain layouts */
+/* This might need adjustment based on overall app structure and if you have a footer */
+/* :host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Make sure the template can fill the viewport height */
+/*}
+
+.admin-content {
+  flex-grow: 1; /* Allows this area to expand and push footer down */
+/*}*/
