@@ -1,0 +1,18 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Customer Details</h5>
+    </div>
+    <div class="card-body">
+      <p><strong>Customer ID:</strong> {{ customerId }}</p>
+      <div *ngIf="customer">
+        <p><strong>Name:</strong> {{ customer.name }}</p>
+        <p><strong>Email:</strong> {{ customer.email }}</p>
+        <!-- Add more fields as needed -->
+      </div>
+      <div *ngIf="!customer">
+        <em>No customer data available.</em>
+      </div>
+    </div>
+  </div>
+</div>
