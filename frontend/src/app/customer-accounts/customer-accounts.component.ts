@@ -21,8 +21,8 @@ export class CustomerAccountsComponent implements OnInit {
   customerId!: number;
   customer!: Customer;
   accounts$: Observable<Array<BankAccount>> | undefined;
-  errorMessage: string | null = null;
-  successMessage: string | null = null;
+  errorMessage: string = '';
+  successMessage: string = '';
 
   showCreateCurrentAccountForm: boolean = false;
   showCreateSavingAccountForm: boolean = false;
@@ -100,15 +100,15 @@ export class CustomerAccountsComponent implements OnInit {
   toggleCreateCurrentAccountForm() {
     this.showCreateCurrentAccountForm = !this.showCreateCurrentAccountForm;
     this.showCreateSavingAccountForm = false;
-    this.successMessage = null;
-    this.errorMessage = null;
+    this.successMessage = '';
+    this.errorMessage = '';
   }
 
   toggleCreateSavingAccountForm() {
     this.showCreateSavingAccountForm = !this.showCreateSavingAccountForm;
     this.showCreateCurrentAccountForm = false;
-    this.successMessage = null;
-    this.errorMessage = null;
+    this.successMessage = '';
+    this.errorMessage = '';
   }
 
   handleCreateCurrentAccount() {
@@ -158,8 +158,8 @@ export class CustomerAccountsComponent implements OnInit {
     this.selectedAccountForOperation = account;
     this.operationAmountForm.reset();
     this.showDebitModal = true;
-    this.successMessage = null;
-    this.errorMessage = null;
+    this.successMessage = '';
+    this.errorMessage = '';
   }
 
   closeDebitModal() {
@@ -189,8 +189,8 @@ export class CustomerAccountsComponent implements OnInit {
     this.selectedAccountForOperation = account;
     this.operationAmountForm.reset();
     this.showCreditModal = true;
-    this.successMessage = null;
-    this.errorMessage = null;
+    this.successMessage = '';
+    this.errorMessage = '';
   }
 
   closeCreditModal() {
@@ -219,8 +219,8 @@ export class CustomerAccountsComponent implements OnInit {
     this.selectedAccountForOperation = account;
     this.transferForm.reset({ description: 'Transfer' }); // Reset with default description
     this.showTransferModal = true;
-    this.successMessage = null;
-    this.errorMessage = null;
+    this.successMessage = '';
+    this.errorMessage = '';
   }
 
   closeTransferModal() {
@@ -252,6 +252,8 @@ export class CustomerAccountsComponent implements OnInit {
     // this.router.navigate(['/admin/account-operations', account.id]);
     this.successMessage = `Operations for account ${account.id} would be shown here.`;
     // For now, just using a success message as a placeholder action
-    setTimeout(() => this.successMessage = null, 3000);
+    setTimeout(() => this.successMessage = '', 3000);
   }
+
+
 }

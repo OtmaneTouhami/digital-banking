@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
+  standalone: true
 })
 export class LoginComponent implements OnInit {
   formLogin!: FormGroup;
+  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +38,7 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           console.error('Login failed:', error);
+          this.errorMessage = 'Login failed. Please check your credentials and try again.';
         },
       });
     }

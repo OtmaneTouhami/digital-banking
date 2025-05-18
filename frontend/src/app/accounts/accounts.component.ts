@@ -11,6 +11,7 @@ import { AuthService } from '../services/auth.service';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './accounts.component.html',
   styleUrl: './accounts.component.css',
+  standalone: true
 })
 export class AccountsComponent implements OnInit {
   accountFormGroup!: FormGroup;
@@ -45,7 +46,7 @@ export class AccountsComponent implements OnInit {
       .pipe(
         catchError((err) => {
           this.errorMessage = err.message;
-          return throwError(err);
+          return throwError(() => err);
         })
       );
   }

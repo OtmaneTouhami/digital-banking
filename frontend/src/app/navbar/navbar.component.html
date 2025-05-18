@@ -1,24 +1,29 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top app-navbar">
+<nav class="navbar navbar-expand-lg fixed-top app-navbar" (click)="$event.stopPropagation()">
   <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/admin/dashboard">DigitalBank Pro</a>
+    <a class="navbar-brand" routerLink="/admin/dashboard">
+      <i class="bi bi-bank me-2"></i>DigitalBank Pro
+    </a>
     <button
       class="navbar-toggler"
       type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
+      (click)="toggleDropdown('navbarContent', $event)"
       aria-controls="navbarSupportedContent"
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" [ngClass]="{'show': openDropdownId === 'navbarContent'}" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
+          <a class="nav-link" routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/admin/accounts" routerLinkActive="active">Accounts</a>
+          <a class="nav-link" routerLink="/admin/accounts" routerLinkActive="active">
+            <i class="bi bi-wallet2 me-1"></i> Accounts
+          </a>
         </li>
         <li class="nav-item dropdown">
           <a
@@ -26,26 +31,25 @@
             href="#"
             id="navbarDropdownCustomers"
             role="button"
-            data-bs-toggle="dropdown"
+            (click)="toggleDropdown('customersDropdown', $event)"
             aria-expanded="false"
             routerLinkActive="active"
           >
-            Customers
+            <i class="bi bi-people me-1"></i> Customers
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownCustomers">
+          <ul class="dropdown-menu" [ngClass]="{'show': openDropdownId === 'customersDropdown'}" aria-labelledby="navbarDropdownCustomers">
             <li>
-              <a class="dropdown-item" routerLink="/admin/customers" routerLinkActive="active-dropdown-item"
-                >Search customers</a
-              >
+              <a class="dropdown-item" routerLink="/admin/customers" routerLinkActive="active-dropdown-item" (click)="closeAllDropdowns()">
+                <i class="bi bi-search me-2"></i>Search customers
+              </a>
             </li>
             <li *ngIf="authService.roles.includes('ADMIN')">
-              <a class="dropdown-item" routerLink="/admin/new-customer" routerLinkActive="active-dropdown-item"
-                >New customer</a
-              >
+              <a class="dropdown-item" routerLink="/admin/new-customer" routerLinkActive="active-dropdown-item" (click)="closeAllDropdowns()">
+                <i class="bi bi-person-plus me-2"></i>New customer
+              </a>
             </li>
           </ul>
         </li>
-        <!-- Removed old Home link as Dashboard serves that purpose -->
       </ul>
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown" *ngIf="authService.isAuthenticated">
@@ -54,26 +58,32 @@
             href="#"
             id="navbarDropdownProfile"
             role="button"
-            data-bs-toggle="dropdown"
+            (click)="toggleDropdown('profileDropdown', $event)"
             aria-expanded="false"
           >
-            <i class="bi bi-person-circle me-1"></i> <!-- Optional: Bootstrap Icon -->
-            {{ authService.userName }}
+            <div class="d-flex align-items-center">
+              <div class="avatar-circle me-2">
+                <span class="initials">{{authService.userName.charAt(0).toUpperCase()}}</span>
+              </div>
+              <span class="d-none d-md-inline me-1">{{ authService.userName }}</span>
+              <i class="bi bi-chevron-down ms-1 small"></i>
+            </div>
           </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownProfile">
+          <ul class="dropdown-menu dropdown-menu-end profile-dropdown" [ngClass]="{'show': openDropdownId === 'profileDropdown'}" aria-labelledby="navbarDropdownProfile">
+            <li class="dropdown-header">Account</li>
             <li>
-              <a class="dropdown-item" routerLink="/admin/profile" routerLinkActive="active-dropdown-item">
+              <a class="dropdown-item" routerLink="/admin/profile" routerLinkActive="active-dropdown-item" (click)="closeAllDropdowns()">
                 <i class="bi bi-person-lines-fill me-2"></i>View Profile
               </a>
             </li>
             <li>
-              <a class="dropdown-item" routerLink="/admin/change-password" routerLinkActive="active-dropdown-item">
+              <a class="dropdown-item" routerLink="/admin/change-password" routerLinkActive="active-dropdown-item" (click)="closeAllDropdowns()">
                 <i class="bi bi-key-fill me-2"></i>Change Password
               </a>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
-              <a class="dropdown-item logout-link" (click)="logout()" style="cursor: pointer;">
+              <a class="dropdown-item logout-link" (click)="logout(); closeAllDropdowns()" style="cursor: pointer;">
                 <i class="bi bi-box-arrow-right me-2"></i>Logout
               </a>
             </li>
@@ -81,7 +91,9 @@
         </li>
       </ul>
       <div class="d-flex align-items-center" *ngIf="!authService.isAuthenticated">
-        <a class="btn btn-outline-light" routerLink="/login">Login</a>
+        <a class="btn btn-primary login-btn" routerLink="/login">
+          <i class="bi bi-box-arrow-in-right me-1"></i> Login
+        </a>
       </div>
     </div>
   </div>
